@@ -9,6 +9,17 @@
 
 #include "icm20948_driver.hpp"
 #include "aerocam_stabilizer.hpp"
+#include "gimbal_mixer.hpp"
+
+// Define AEROCAM_USE_SPI_DMA=0 to keep the blocking SPI transport for
+// boards that do not have DMA configured yet. DMA is the default path.
+#ifndef AEROCAM_USE_SPI_DMA
+#define AEROCAM_USE_SPI_DMA 1
+#endif
+
+#if AEROCAM_USE_SPI_DMA
+#include "spi_dma.hpp"
+#endif
 
 // ============================================================
 // MCU SELECTION
@@ -48,8 +59,11 @@ enum class MotorAxis : uint8_t {
 };
 
 // ============================================================
-// SPI Bus Implementation
+// SPI Bus Integration Point
 // ============================================================
+#if AEROCAM_USE_SPI_DMA
+using SpiBus_STM32_Selected = aerocam::SpiBus_STM32_DMA;
+#else
 class SpiBus_STM32 : public aerocam::SpiBus {
 public:
     SpiBus_STM32(SPI_HandleTypeDef* h, GPIO_TypeDef* port, uint16_t pin)
@@ -84,6 +98,8 @@ private:
     GPIO_TypeDef* cs_port_;
     uint16_t cs_pin_;
 };
+using SpiBus_STM32_Selected = SpiBus_STM32;
+#endif
 
 // ============================================================
 // Motor Driver (PWM)
@@ -139,10 +155,27 @@ extern "C" void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 // ============================================================
 // Static System Objects (no dynamic allocation)
 // ============================================================
-static SpiBus_STM32* g_spi = nullptr;
+static SpiBus_STM32_Selected* g_spi = nullptr;
 static aerocam::ICM20948_Driver* g_imu = nullptr;
 static aerocam::AeroCam_Stabilizer* g_stab = nullptr;
+static aerocam::GimbalMixer* g_mixer = nullptr;
 static MotorDriver* g_motors = nullptr;
+
+#if AEROCAM_USE_SPI_DMA
+// SPI DMA integration point: route HAL completion interrupts back to the
+// static SPI bus instance selected above.
+extern "C" void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef* hspi) {
+    if ((hspi == &hspi1) && (g_spi != nullptr)) {
+        g_spi->on_txrx_complete();
+    }
+}
+
+extern "C" void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef* hspi) {
+    if ((hspi == &hspi1) && (g_spi != nullptr)) {
+        g_spi->on_txrx_complete();
+    }
+}
+#endif
 
 // ============================================================
 // MCU-SPECIFIC INITIALIZATION BLOCKS
@@ -307,9 +340,12 @@ int main() {
     constexpr uint16_t IMU_CS_PIN = GPIO_PIN_4;
     GPIO_TypeDef* IMU_CS_PORT = GPIOA;
 
-    static SpiBus_STM32 spi(&hspi1, IMU_CS_PORT, IMU_CS_PIN);
+    // Static integration point: SPI DMA can be disabled with
+    // AEROCAM_USE_SPI_DMA=0 while keeping the same IMU wiring.
+    static SpiBus_STM32_Selected spi(&hspi1, IMU_CS_PORT, IMU_CS_PIN);
     static aerocam::ICM20948_Driver imu(spi);
     static aerocam::AeroCam_Stabilizer stab(imu);
+    static aerocam::GimbalMixer mixer;
     static MotorDriver motors(&htim1,
                               TIM_CHANNEL_1,
                               TIM_CHANNEL_2,
@@ -318,6 +354,7 @@ int main() {
     g_spi = &spi;
     g_imu = &imu;
     g_stab = &stab;
+    g_mixer = &mixer;
     g_motors = &motors;
 
     motors.init();
@@ -339,11 +376,15 @@ int main() {
             g_tick = false;
 
             stab.update(dt);
-            aerocam::Vec3 cmd = stab.motor_command();
 
-            motors.set(MotorAxis::ROLL,  cmd.x);
-            motors.set(MotorAxis::PITCH, cmd.y);
-            motors.set(MotorAxis::YAW,   cmd.z);
+            // Gimbal mixer integration point: convert stabilizer output into
+            // per-axis motor commands before touching PWM hardware.
+            const aerocam::GimbalMixer::MotorCommands cmd =
+                mixer.mix(stab.motor_command());
+
+            motors.set(MotorAxis::ROLL,  cmd.roll);
+            motors.set(MotorAxis::PITCH, cmd.pitch);
+            motors.set(MotorAxis::YAW,   cmd.yaw);
         }
 
         // Optional low-power sleep
