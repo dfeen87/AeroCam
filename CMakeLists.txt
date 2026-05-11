@@ -33,12 +33,20 @@ if(NOT AEROCAM_TESTS)
 
     # Translate the CMake MCU string into the integer sentinel consumed by
     # mcu_hal.hpp (and any other firmware header that uses #if MCU == F4).
+    # Also wire in the matching STM32 HAL Inc directory so the family-specific
+    # HAL header (stm32f4xx_hal.h / stm32f7xx_hal.h / stm32h7xx_hal.h) is found.
     if(MCU STREQUAL "F4")
         target_compile_definitions(AeroCam PRIVATE MCU=4)
+        target_include_directories(AeroCam PRIVATE
+            ${CMAKE_SOURCE_DIR}/Drivers/STM32F4xx_HAL_Driver/Inc)
     elseif(MCU STREQUAL "F7")
         target_compile_definitions(AeroCam PRIVATE MCU=7)
+        target_include_directories(AeroCam PRIVATE
+            ${CMAKE_SOURCE_DIR}/Drivers/STM32F7xx_HAL_Driver/Inc)
     elseif(MCU STREQUAL "H7")
         target_compile_definitions(AeroCam PRIVATE MCU=8)
+        target_include_directories(AeroCam PRIVATE
+            ${CMAKE_SOURCE_DIR}/Drivers/STM32H7xx_HAL_Driver/Inc)
     else()
         message(FATAL_ERROR "Unknown MCU '${MCU}'. Use F4, F7, or H7.")
     endif()
