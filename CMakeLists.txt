@@ -31,6 +31,18 @@ if(NOT AEROCAM_TESTS)
     add_executable(AeroCam ${AEROCAM_SOURCES} ${AEROCAM_HEADERS})
     target_include_directories(AeroCam PUBLIC include)
 
+    # Translate the CMake MCU string into the integer sentinel consumed by
+    # mcu_hal.hpp (and any other firmware header that uses #if MCU == F4).
+    if(MCU STREQUAL "F4")
+        target_compile_definitions(AeroCam PRIVATE MCU=4)
+    elseif(MCU STREQUAL "F7")
+        target_compile_definitions(AeroCam PRIVATE MCU=7)
+    elseif(MCU STREQUAL "H7")
+        target_compile_definitions(AeroCam PRIVATE MCU=8)
+    else()
+        message(FATAL_ERROR "Unknown MCU '${MCU}'. Use F4, F7, or H7.")
+    endif()
+
     add_custom_command(TARGET AeroCam POST_BUILD
         COMMAND ${CMAKE_OBJCOPY} -O binary AeroCam.elf AeroCam.bin
         COMMAND ${CMAKE_SIZE} AeroCam.elf

@@ -11,15 +11,7 @@
 
 #include "icm20948_driver.hpp"
 
-#if defined(MCU_F4)
-    #include "stm32f4xx_hal.h"
-#elif defined(MCU_F7)
-    #include "stm32f7xx_hal.h"
-#elif defined(MCU_H7)
-    #include "stm32h7xx_hal.h"
-#else
-    #error "No MCU family defined. Define MCU_F4, MCU_F7, or MCU_H7."
-#endif
+#include "mcu_hal.hpp"
 
 namespace aerocam {
 
