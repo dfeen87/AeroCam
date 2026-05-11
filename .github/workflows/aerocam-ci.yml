@@ -33,7 +33,7 @@ jobs:
       run: |
         cmake .. \
           -DCMAKE_TOOLCHAIN_FILE=cmake/arm-gcc-toolchain.cmake \
-          -DMCU_${{ matrix.mcu }}=ON \
+          -DMCU=${{ matrix.mcu }} \
           -DCMAKE_BUILD_TYPE=Release
 
     - name: Build firmware
