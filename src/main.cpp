@@ -24,23 +24,15 @@
 // ============================================================
 // MCU SELECTION
 // ============================================================
-// Define one of these in your CMake or compiler flags:
+// Pass one of the following to CMake:
 //
-//   -DMCU_F4
-//   -DMCU_F7
-//   -DMCU_H7
+//   -DMCU=F4
+//   -DMCU=F7
+//   -DMCU=H7
 //
 // ============================================================
 
-#if defined(MCU_F4)
-    #include "stm32f4xx_hal.h"
-#elif defined(MCU_F7)
-    #include "stm32f7xx_hal.h"
-#elif defined(MCU_H7)
-    #include "stm32h7xx_hal.h"
-#else
-    #error "No MCU family defined. Define MCU_F4, MCU_F7, or MCU_H7."
-#endif
+#include "mcu_hal.hpp"
 
 // ============================================================
 // External HAL handles (CubeMX normally generates these)
@@ -187,7 +179,7 @@ extern "C" void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef* hspi) {
     }
 }
 
-#if defined(MCU_F4)
+#if MCU == F4
 static void SystemClock_Config() {
     __HAL_RCC_PWR_CLK_ENABLE();
     __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
@@ -227,7 +219,7 @@ static void MX_TIM2_Init() {
     // 1 kHz control loop timer
 }
 
-#elif defined(MCU_F7)
+#elif MCU == F7
 static void SystemClock_Config() {
     __HAL_RCC_PWR_CLK_ENABLE();
     __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
@@ -271,7 +263,7 @@ static void MX_TIM2_Init() {
     // 1 kHz control loop timer
 }
 
-#elif defined(MCU_H7)
+#elif MCU == H7
 static void SystemClock_Config() {
     if (HAL_PWREx_ConfigSupply(PWR_LDO_SUPPLY) != HAL_OK) {
         ClockConfig_ErrorHandler();
