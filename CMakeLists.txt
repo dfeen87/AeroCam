@@ -43,16 +43,15 @@ endif()
 if(AEROCAM_TESTS)
     enable_testing()
 
-    set(AEROCAM_TEST_SOURCES
-        tests/test_quaternion.cpp
-        tests/test_ekf.cpp
+    file(GLOB AEROCAM_TEST_SOURCES CONFIGURE_DEPENDS
+        "${CMAKE_SOURCE_DIR}/tests/test_*.cpp"
     )
 
-    if(EXISTS "${CMAKE_SOURCE_DIR}/tests/test_quaternion.cpp" AND EXISTS "${CMAKE_SOURCE_DIR}/tests/test_ekf.cpp")
+    if(AEROCAM_TEST_SOURCES)
         add_executable(AeroCamTests ${AEROCAM_TEST_SOURCES})
         target_include_directories(AeroCamTests PUBLIC include)
         add_test(NAME AeroCamTests COMMAND AeroCamTests)
     else()
-        message(WARNING "AEROCAM_TESTS is ON but tests/ sources are missing; skipping test target.")
+        message(WARNING "AEROCAM_TESTS is ON but no tests/test_*.cpp files were found; skipping test target.")
     endif()
 endif()

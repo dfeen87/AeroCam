@@ -68,8 +68,7 @@ jobs:
           -DAEROCAM_TESTS=ON
 
     - name: Build tests
-      working-directory: build-tests
-      run: cmake --build . --config Release -- -j$(nproc)
+      run: cmake --build build-tests --config Release --parallel
 
     - name: Run tests
       working-directory: build-tests
