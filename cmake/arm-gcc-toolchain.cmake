@@ -57,4 +57,4 @@ set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} -std=c++20")
 # -------------------------------------------------------------------
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/AeroCam.ld)
 
-set(CMAKE_EXE_LINKER_FLAGS "${CPU_FLAGS} -T${LINKER_SCRIPT} -Wl,--gc-sections -Wl,-Map=${PROJECT_NAME}.map")
+set(CMAKE_EXE_LINKER_FLAGS "${CPU_FLAGS} -T${LINKER_SCRIPT} --specs=nosys.specs -Wl,--gc-sections -Wl,-Map=${PROJECT_NAME}.map")

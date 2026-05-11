@@ -137,6 +137,10 @@ SECTIONS
     *(COMMON)
     . = ALIGN(4);
     _ebss = .;
+    end = .;
+    __end = .;
+    _end = .;
+    __end__ = .;
   } > RAM
 
   .stack ORIGIN(RAM) + LENGTH(RAM) - _Min_Stack_Size (NOLOAD) :

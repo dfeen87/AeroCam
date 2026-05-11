@@ -37,9 +37,9 @@
 // ============================================================
 // External HAL handles (CubeMX normally generates these)
 // ============================================================
-extern SPI_HandleTypeDef hspi1;
-extern TIM_HandleTypeDef htim1;   // PWM
-extern TIM_HandleTypeDef htim2;   // 1 kHz control loop
+SPI_HandleTypeDef hspi1;
+TIM_HandleTypeDef htim1;   // PWM
+TIM_HandleTypeDef htim2;   // 1 kHz control loop
 
 // ============================================================
 // Motor Axis Enum
