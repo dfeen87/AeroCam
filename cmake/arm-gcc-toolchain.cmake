@@ -44,26 +44,17 @@ else()
     message(FATAL_ERROR "Unknown MCU: ${MCU}. Use F4, F7, or H7.")
 endif()
 
-set(COMMON_FLAGS "
-    ${CPU_FLAGS}
-    -mthumb
-    -O3
-    -ffast-math
-    -fno-exceptions
-    -fno-rtti
-    -fdata-sections
-    -ffunction-sections
-    -Wall -Wextra
-")
+# -------------------------------------------------------------------
+# Flags (single-line to avoid Ninja parse errors)
+# -------------------------------------------------------------------
+set(COMMON_FLAGS "${CPU_FLAGS} -mthumb -O3 -ffast-math -fno-exceptions -fno-rtti -fdata-sections -ffunction-sections -Wall -Wextra")
 
 set(CMAKE_C_FLAGS   "${COMMON_FLAGS} -std=c11")
 set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} -std=c++20")
 
+# -------------------------------------------------------------------
+# Linker
+# -------------------------------------------------------------------
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/AeroCam.ld)
 
-set(CMAKE_EXE_LINKER_FLAGS "
-    ${CPU_FLAGS}
-    -T${LINKER_SCRIPT}
-    -Wl,--gc-sections
-    -Wl,-Map=${PROJECT_NAME}.map
-")
+set(CMAKE_EXE_LINKER_FLAGS "${CPU_FLAGS} -T${LINKER_SCRIPT} -Wl,--gc-sections -Wl,-Map=${PROJECT_NAME}.map")
