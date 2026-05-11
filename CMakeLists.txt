@@ -4,14 +4,16 @@ cmake_minimum_required(VERSION 3.20)
 project(AeroCam LANGUAGES C CXX)
 
 # -------------------------------------------------------------------
-# MCU Selection Validation
+# MCU validation (after toolchain is loaded)
 # -------------------------------------------------------------------
-if(NOT (MCU_F4 OR MCU_F7 OR MCU_H7))
-    message(FATAL_ERROR "You must define one MCU: -DMCU_F4=ON, -DMCU_F7=ON, or -DMCU_H7=ON")
+if(NOT DEFINED MCU)
+    message(FATAL_ERROR "Define -DMCU=F4, F7, or H7 when configuring.")
 endif()
 
+message(STATUS "Building AeroCam for MCU=${MCU}")
+
 # -------------------------------------------------------------------
-# Source Files
+# Sources
 # -------------------------------------------------------------------
 set(AEROCAM_SOURCES
     src/main.cpp
@@ -27,14 +29,14 @@ set(AEROCAM_HEADERS
 )
 
 # -------------------------------------------------------------------
-# Firmware Target
+# Firmware target
 # -------------------------------------------------------------------
 add_executable(AeroCam ${AEROCAM_SOURCES} ${AEROCAM_HEADERS})
 
 target_include_directories(AeroCam PUBLIC include)
 
 # -------------------------------------------------------------------
-# Post-Build Artifacts
+# Post-build artifacts
 # -------------------------------------------------------------------
 add_custom_command(TARGET AeroCam POST_BUILD
     COMMAND ${CMAKE_OBJCOPY} -O binary AeroCam.elf AeroCam.bin
@@ -42,7 +44,7 @@ add_custom_command(TARGET AeroCam POST_BUILD
 )
 
 # -------------------------------------------------------------------
-# Optional Unit Tests
+# Optional tests
 # -------------------------------------------------------------------
 if(AEROCAM_TESTS)
     enable_testing()
@@ -54,5 +56,5 @@ if(AEROCAM_TESTS)
 
     target_include_directories(AeroCamTests PUBLIC include)
 
-    add_test(NAME QuaternionTests COMMAND AeroCamTests)
+    add_test(NAME AeroCamTests COMMAND AeroCamTests)
 endif()
