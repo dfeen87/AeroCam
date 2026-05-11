@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright (...)
+ * Copyright (c) 2026 Don Michael Feeney Jr
  */
 
 #include <cstdint>
