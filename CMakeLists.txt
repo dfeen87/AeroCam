@@ -14,4 +14,12 @@ add_library(aerocam STATIC
     src/quaternion.cpp
 )
 
+# -------------------------------------------------------------------
+# Output Formats
+# -------------------------------------------------------------------
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O binary ${PROJECT_NAME}.elf ${PROJECT_NAME}.bin
+    COMMAND ${CMAKE_SIZE} ${PROJECT_NAME}.elf
+)
+
 target_include_directories(aerocam PUBLIC include)
