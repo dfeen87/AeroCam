@@ -1,7 +1,7 @@
 # MIT License
 cmake_minimum_required(VERSION 3.20)
 
-project(AeroCam LANGUAGES C CXX)
+project(AeroCam LANGUAGES C CXX ASM)
 
 option(AEROCAM_TESTS "Enable native unit tests" OFF)
 
@@ -20,6 +20,7 @@ if(NOT AEROCAM_TESTS)
         src/icm20948_driver.cpp
         src/aerocam_stabilizer.cpp
         src/quaternion.cpp
+        src/startup_aerocam.s
     )
 
     set(AEROCAM_HEADERS
@@ -52,8 +53,8 @@ if(NOT AEROCAM_TESTS)
     endif()
 
     add_custom_command(TARGET AeroCam POST_BUILD
-        COMMAND ${CMAKE_OBJCOPY} -O binary AeroCam.elf AeroCam.bin
-        COMMAND ${CMAKE_SIZE} AeroCam.elf
+        COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:AeroCam> AeroCam.bin
+        COMMAND ${CMAKE_SIZE} $<TARGET_FILE:AeroCam>
     )
 endif()
 
