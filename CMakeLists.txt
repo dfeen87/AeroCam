@@ -53,8 +53,8 @@ if(NOT AEROCAM_TESTS)
     endif()
 
     add_custom_command(TARGET AeroCam POST_BUILD
-        COMMAND ${CMAKE_OBJCOPY} -O binary AeroCam.elf AeroCam.bin
-        COMMAND ${CMAKE_SIZE} AeroCam.elf
+        COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:AeroCam> AeroCam.bin
+        COMMAND ${CMAKE_SIZE} $<TARGET_FILE:AeroCam>
     )
 endif()
 
