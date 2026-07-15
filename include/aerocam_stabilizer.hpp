@@ -15,7 +15,8 @@ namespace aerocam {
 
 enum class StabilizerMode : std::uint8_t {
     FILM_MODE,
-    AERO_MODE
+    AERO_MODE,
+    DRONE_MODE
 };
 
 struct StateVector {

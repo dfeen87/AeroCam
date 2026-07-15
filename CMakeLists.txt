@@ -19,6 +19,7 @@ if(NOT AEROCAM_TESTS)
         src/main.cpp
         src/icm20948_driver.cpp
         src/aerocam_stabilizer.cpp
+        src/drone_stabilizer.cpp
         src/quaternion.cpp
         src/startup_aerocam.s
     )
@@ -26,6 +27,7 @@ if(NOT AEROCAM_TESTS)
     set(AEROCAM_HEADERS
         include/icm20948_driver.hpp
         include/aerocam_stabilizer.hpp
+        include/drone_stabilizer.hpp
         include/quaternion.hpp
     )
 
