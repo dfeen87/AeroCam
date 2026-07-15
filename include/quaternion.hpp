@@ -15,6 +15,13 @@ struct Vec3 {
     float z;
 };
 
+struct Vec4 {
+    float x;
+    float y;
+    float z;
+    float w;
+};
+
 class Quaternion {
 public:
     float w;
