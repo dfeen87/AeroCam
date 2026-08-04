@@ -1,7 +1,7 @@
 #ifndef AEROCAM_SPI_DMA_HPP
 #define AEROCAM_SPI_DMA_HPP
 /*
- * MIT License
+ * Licensed under the PolyForm Noncommercial License 1.0.0
  * Copyright (c) 2026 Don Michael Feeney Jr
  */
 

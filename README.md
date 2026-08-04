@@ -5,7 +5,7 @@
 Powered by the AI-Lex Energy Equation and ICM-20948 telemetry, AeroCam delivers ultra-smooth, mathematically rigorous tracking for the open-source film community.
 
 [![Build Status](https://github.com/dfeen87/AeroCam/actions/workflows/aerocam-ci.yml/badge.svg)](https://github.com/dfeen87/AeroCam/actions/workflows/aerocam-ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](LICENSE)
 [![CMake](https://img.shields.io/badge/CMake-%23008FBA.svg?style=flat&logo=cmake&logoColor=white)](https://cmake.org/)
 [![ARM GCC](https://img.shields.io/badge/ARM_GCC-blue.svg)](https://developer.arm.com/Tools%20and%20Software/GNU%20Toolchain)
 
@@ -184,7 +184,9 @@ Refer to [`docs/BRINGUP.md`](docs/BRINGUP.md) for full details.
 
 ## License
 
-AeroCam is distributed under the MIT License. See [LICENSE](LICENSE) for more details.
+AeroCam is licensed under the PolyForm Noncommercial License 1.0.0. See [LICENSE](LICENSE) for the full license text.
+
+This license permits personal, educational, research, charitable, public-sector, and other non-commercial uses. Commercial use is not permitted under these terms; contact the project maintainers if you need commercial licensing.
 
 ---
 
