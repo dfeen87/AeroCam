@@ -1,4 +1,4 @@
-# MIT License
+# Licensed under the PolyForm Noncommercial License 1.0.0
 # AeroCam ARM GCC Toolchain File
 
 set(CMAKE_SYSTEM_NAME Generic)
