@@ -1,7 +1,7 @@
 # AeroCam Firmware Bring-Up Guide
 
-[![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](../LICENSE)
-**© 2026 Don Michael Feeney Jr**
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../LICENSE)
+**Copyright (c) 2026 Don Michael Feeney Jr.**
 
 > [!IMPORTANT]
 > **Prerequisites Checklist**

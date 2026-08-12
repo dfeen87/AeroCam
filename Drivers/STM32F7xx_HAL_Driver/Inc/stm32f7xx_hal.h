@@ -1,6 +1,6 @@
 /*
- * Licensed under the PolyForm Noncommercial License 1.0.0
- * Copyright (c) 2026 Don Michael Feeney Jr
+ * Copyright (c) 2026 Don Michael Feeney Jr.
+ * Licensed under the MIT License.
  *
  * Minimal STM32F7xx HAL stub for AeroCam CI compilation.
  * Provides the types, macros, and static-inline function stubs consumed by

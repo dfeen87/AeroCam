@@ -1,4 +1,5 @@
-# Licensed under the PolyForm Noncommercial License 1.0.0
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the MIT License.
 cmake_minimum_required(VERSION 3.20)
 
 project(AeroCam LANGUAGES C CXX ASM)
