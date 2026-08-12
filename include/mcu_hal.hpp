@@ -1,8 +1,8 @@
 #ifndef AEROCAM_MCU_HAL_HPP
 #define AEROCAM_MCU_HAL_HPP
 /*
- * Licensed under the PolyForm Noncommercial License 1.0.0
- * Copyright (c) 2026 Don Michael Feeney Jr
+ * Copyright (c) 2026 Don Michael Feeney Jr.
+ * Licensed under the MIT License.
  *
  * MCU family integer sentinels and HAL header selection.
  *
