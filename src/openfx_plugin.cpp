@@ -105,6 +105,7 @@ int aerocam_ofx_init() {
 }
 
 int aerocam_ofx_process_frame(double time, const OFXImageBuffer* in_img, OFXImageBuffer* out_img, const AeroCamPluginParams* params) {
+    (void)time;
     if (!in_img || !out_img || !params) return -1;
     // Standard OFX processing entry point stub
     return 0;

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <cmath>
 #include <cstring>
+#include <cstdlib>
 
 namespace aerocam {
 
@@ -27,9 +28,11 @@ std::vector<IMUSample> IMUTelemetryParser::parse_csv(const std::string& csv_cont
         std::vector<double> values;
 
         while (std::getline(line_stream, token, ',')) {
-            try {
-                values.push_back(std::stod(token));
-            } catch (...) {
+            char* end_ptr = nullptr;
+            double val = std::strtod(token.c_str(), &end_ptr);
+            if (end_ptr != token.c_str() && *end_ptr == '\0') {
+                values.push_back(val);
+            } else {
                 // If header or invalid token
                 break;
             }
