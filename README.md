@@ -1,6 +1,6 @@
-# AeroCam
+# AeroCam v3.0.0
 
-**A bare-metal C++ framework targeting ARM Cortex-M microcontrollers for aerospace propulsion math and predictive cinematic stabilization.**
+**A bare-metal C++ framework targeting ARM Cortex-M microcontrollers for aerospace propulsion math, predictive cinematic stabilization, and GoPro-class IMU post-processing plugins.**
 
 Powered by the AI-Lex Energy Equation and ICM-20948 telemetry, AeroCam delivers ultra-smooth, mathematically rigorous tracking for the open-source film community.
 

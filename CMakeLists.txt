@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 cmake_minimum_required(VERSION 3.20)
 
-project(AeroCam LANGUAGES C CXX ASM)
+project(AeroCam VERSION 3.0.0 LANGUAGES C CXX ASM)
 
 option(AEROCAM_TESTS "Enable native unit tests" OFF)
 
@@ -22,6 +22,9 @@ if(NOT AEROCAM_TESTS)
         src/aerocam_stabilizer.cpp
         src/drone_stabilizer.cpp
         src/quaternion.cpp
+        src/imu_telemetry_parser.cpp
+        src/motion_deblur.cpp
+        src/openfx_plugin.cpp
         src/startup_aerocam.s
     )
 
@@ -30,15 +33,14 @@ if(NOT AEROCAM_TESTS)
         include/aerocam_stabilizer.hpp
         include/drone_stabilizer.hpp
         include/quaternion.hpp
+        include/imu_telemetry_parser.hpp
+        include/motion_deblur.hpp
+        include/openfx_plugin.hpp
     )
 
     add_executable(AeroCam ${AEROCAM_SOURCES} ${AEROCAM_HEADERS})
     target_include_directories(AeroCam PUBLIC include)
 
-    # Translate the CMake MCU string into the integer sentinel consumed by
-    # mcu_hal.hpp (and any other firmware header that uses #if MCU == F4).
-    # Also wire in the matching STM32 HAL Inc directory so the family-specific
-    # HAL header (stm32f4xx_hal.h / stm32f7xx_hal.h / stm32h7xx_hal.h) is found.
     if(MCU STREQUAL "F4")
         target_compile_definitions(AeroCam PRIVATE MCU=4)
         target_include_directories(AeroCam PRIVATE
@@ -67,23 +69,24 @@ endif()
 if(AEROCAM_TESTS)
     enable_testing()
 
-    set(AEROCAM_TEST_SOURCES
-        tests/test_quaternion.cpp
-        tests/test_ekf.cpp
+    set(AEROCAM_LIB_SOURCES
+        src/aerocam_stabilizer.cpp
+        src/drone_stabilizer.cpp
+        src/quaternion.cpp
+        src/imu_telemetry_parser.cpp
+        src/motion_deblur.cpp
+        src/openfx_plugin.cpp
     )
 
-    set(MISSING_TEST_SOURCES "")
-    foreach(TEST_SOURCE IN LISTS AEROCAM_TEST_SOURCES)
-        if(NOT EXISTS "${CMAKE_SOURCE_DIR}/${TEST_SOURCE}")
-            list(APPEND MISSING_TEST_SOURCES "${TEST_SOURCE}")
-        endif()
-    endforeach()
+    add_library(AeroCamLib STATIC ${AEROCAM_LIB_SOURCES})
+    target_compile_features(AeroCamLib PUBLIC cxx_std_20)
+    target_include_directories(AeroCamLib PUBLIC include)
 
-    if(NOT MISSING_TEST_SOURCES)
-        add_executable(AeroCamTests ${AEROCAM_TEST_SOURCES})
-        target_include_directories(AeroCamTests PUBLIC include)
-        add_test(NAME AeroCamTests COMMAND AeroCamTests)
-    else()
-        message(WARNING "AEROCAM_TESTS is ON but test sources are missing: ${MISSING_TEST_SOURCES}; skipping test target.")
-    endif()
+    add_executable(TestQuaternion tests/test_quaternion.cpp)
+    target_link_libraries(TestQuaternion PRIVATE AeroCamLib)
+    add_test(NAME TestQuaternion COMMAND TestQuaternion)
+
+    add_executable(TestEKF tests/test_ekf.cpp)
+    target_link_libraries(TestEKF PRIVATE AeroCamLib)
+    add_test(NAME TestEKF COMMAND TestEKF)
 endif()
