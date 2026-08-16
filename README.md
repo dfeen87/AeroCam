@@ -1,8 +1,8 @@
-# AeroCam v2.0.0
+# AeroCam v3.0.0
 
 **A bare-metal C++ framework for ARM Cortex-M microcontrollers and post-processing OpenFX video stabilization plugins powered by the AI-Lex Energy Equation.**
 
-[![Version](https://img.shields.io/badge/AeroCam-v2.0.0-blue.svg)](#)
+[![Version](https://img.shields.io/badge/AeroCam-v3.0.0-blue.svg)](#)
 [![Build Status](https://github.com/dfeen87/AeroCam/actions/workflows/aerocam-ci.yml/badge.svg)](https://github.com/dfeen87/AeroCam/actions/workflows/aerocam-ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CMake](https://img.shields.io/badge/CMake-%23008FBA.svg?style=flat&logo=cmake&logoColor=white)](https://cmake.org/)
@@ -13,7 +13,7 @@
 
 ## Overview
 
-**AeroCam v2.0.0** is an advanced dual-domain system designed for real-time aerospace propulsion stabilization and cinematic video post-processing:
+**AeroCam v3.0.0** is an advanced dual-domain system designed for real-time aerospace propulsion stabilization and cinematic video post-processing:
 
 1. **Real-Time Embedded MCU Firmware:** Runs bare-metal on ARM Cortex-M microcontrollers (STM32F4/F7/H7) at 1 kHz control loop frequencies with deterministic static memory allocation. It fuses ICM-20948 IMU telemetry via Extended Kalman Filtering (EKF) to output 3D gimbal motor torque or 4D quadcopter propulsion vectors.
 2. **Post-Processing Video Stabilization & Deblur Engine:** C++ standalone library and C-ABI OpenFX plugin for NLE suites (DaVinci Resolve, Adobe Premiere Pro, Final Cut Pro). Ingests telemetry streams (GoPro GPMF binary, Gyroflow, CSV) to perform 3x3 frame-warp homography, trajectory SLERP smoothing, and anisotropic point spread function (PSF) motion deblurring.
