@@ -5,3 +5,8 @@ CMakeCache.txt
 cmake_install.cmake
 Makefile
 Testing/
+node_modules/
+**/node_modules/
+snap/ts/node_modules/
+snap/ts/dist/
+dist/
