@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 cmake_minimum_required(VERSION 3.20)
 
-project(AeroCam VERSION 3.0.0 LANGUAGES C CXX ASM)
+project(AeroCam VERSION 4.0.0 LANGUAGES C CXX ASM)
 
 option(AEROCAM_TESTS "Enable native unit tests" OFF)
 
@@ -26,6 +26,11 @@ if(NOT AEROCAM_TESTS)
         src/motion_deblur.cpp
         src/openfx_plugin.cpp
         src/startup_aerocam.s
+        snap/cpp/snap_motion_vector_extractor.cpp
+        snap/cpp/snap_stability_scorer.cpp
+        snap/cpp/snap_spectacles_imu_fusion.cpp
+        snap/cpp/snap_spotlight_motion_quality_index.cpp
+        snap/cpp/snap_aerocore_service.cpp
     )
 
     set(AEROCAM_HEADERS
@@ -36,10 +41,16 @@ if(NOT AEROCAM_TESTS)
         include/imu_telemetry_parser.hpp
         include/motion_deblur.hpp
         include/openfx_plugin.hpp
+        snap/include/snap_motion_vector_extractor.hpp
+        snap/include/snap_stability_scorer.hpp
+        snap/include/snap_spectacles_imu_fusion.hpp
+        snap/include/snap_spotlight_motion_quality_index.hpp
+        snap/include/snap_aerocore_service.hpp
+        snap/include/stabilization_shader.hpp
     )
 
     add_executable(AeroCam ${AEROCAM_SOURCES} ${AEROCAM_HEADERS})
-    target_include_directories(AeroCam PUBLIC include)
+    target_include_directories(AeroCam PUBLIC include snap/include)
 
     if(MCU STREQUAL "F4")
         target_compile_definitions(AeroCam PRIVATE MCU=4)
@@ -76,11 +87,16 @@ if(AEROCAM_TESTS)
         src/imu_telemetry_parser.cpp
         src/motion_deblur.cpp
         src/openfx_plugin.cpp
+        snap/cpp/snap_motion_vector_extractor.cpp
+        snap/cpp/snap_stability_scorer.cpp
+        snap/cpp/snap_spectacles_imu_fusion.cpp
+        snap/cpp/snap_spotlight_motion_quality_index.cpp
+        snap/cpp/snap_aerocore_service.cpp
     )
 
     add_library(AeroCamLib STATIC ${AEROCAM_LIB_SOURCES})
     target_compile_features(AeroCamLib PUBLIC cxx_std_20)
-    target_include_directories(AeroCamLib PUBLIC include)
+    target_include_directories(AeroCamLib PUBLIC include snap/include)
 
     add_executable(TestQuaternion tests/test_quaternion.cpp)
     target_link_libraries(TestQuaternion PRIVATE AeroCamLib)
@@ -89,4 +105,17 @@ if(AEROCAM_TESTS)
     add_executable(TestEKF tests/test_ekf.cpp)
     target_link_libraries(TestEKF PRIVATE AeroCamLib)
     add_test(NAME TestEKF COMMAND TestEKF)
+
+    # Snap Motion Intelligence C++ Unit Tests
+    add_executable(TestMotionVectorExtraction snap/tests/test_motion_vector_extraction.cpp)
+    target_link_libraries(TestMotionVectorExtraction PRIVATE AeroCamLib)
+    add_test(NAME TestMotionVectorExtraction COMMAND TestMotionVectorExtraction)
+
+    add_executable(TestSpectaclesImuFusion snap/tests/test_spectacles_imu_fusion.cpp)
+    target_link_libraries(TestSpectaclesImuFusion PRIVATE AeroCamLib)
+    add_test(NAME TestSpectaclesImuFusion COMMAND TestSpectaclesImuFusion)
+
+    add_executable(TestSpotlightMotionQualityIndex snap/tests/test_spotlight_motion_quality_index.cpp)
+    target_link_libraries(TestSpotlightMotionQualityIndex PRIVATE AeroCamLib)
+    add_test(NAME TestSpotlightMotionQualityIndex COMMAND TestSpotlightMotionQualityIndex)
 endif()

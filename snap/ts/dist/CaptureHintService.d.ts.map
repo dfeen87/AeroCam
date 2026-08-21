@@ -1,0 +1,1 @@
+{"version":3,"file":"CaptureHintService.d.ts","sourceRoot":"","sources":["../src/CaptureHintService.ts"],"names":[],"mappings":"AAEA,MAAM,WAAW,WAAW;IAC1B,MAAM,EAAE,QAAQ,GAAG,QAAQ,GAAG,UAAU,CAAC;IACzC,OAAO,EAAE,MAAM,CAAC;IAChB,UAAU,EAAE,MAAM,CAAC;CACpB;AAED,qBAAa,kBAAkB;IAC7B,OAAO,CAAC,QAAQ,CAAkB;IAClC,OAAO,CAAC,WAAW,CAIjB;;IAMK,OAAO,IAAI,WAAW;CAyC9B"}

@@ -1,8 +1,8 @@
-# AeroCam v3.0.0
+# AeroCam v4.0.0
 
-**A bare-metal C++ framework for ARM Cortex-M microcontrollers and post-processing OpenFX video stabilization plugins powered by the AI-Lex Energy Equation.**
+**A bare-metal C++ framework for ARM Cortex-M microcontrollers, OpenFX video stabilization plugins, and Snapchat Motion-Intelligence Subsystem powered by the AI-Lex Energy Equation.**
 
-[![Version](https://img.shields.io/badge/AeroCam-v3.0.0-blue.svg)](#)
+[![Version](https://img.shields.io/badge/AeroCam-v4.0.0-blue.svg)](#)
 [![Build Status](https://github.com/dfeen87/AeroCam/actions/workflows/aerocam-ci.yml/badge.svg)](https://github.com/dfeen87/AeroCam/actions/workflows/aerocam-ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CMake](https://img.shields.io/badge/CMake-%23008FBA.svg?style=flat&logo=cmake&logoColor=white)](https://cmake.org/)
@@ -13,10 +13,66 @@
 
 ## Overview
 
-**AeroCam v3.0.0** is an advanced dual-domain system designed for real-time aerospace propulsion stabilization and cinematic video post-processing:
+**AeroCam v4.0.0** is an advanced multi-domain system designed for real-time aerospace propulsion stabilization, cinematic video post-processing, and Snapchat motion intelligence:
 
 1. **Real-Time Embedded MCU Firmware:** Runs bare-metal on ARM Cortex-M microcontrollers (STM32F4/F7/H7) at 1 kHz control loop frequencies with deterministic static memory allocation. It fuses ICM-20948 IMU telemetry via Extended Kalman Filtering (EKF) to output 3D gimbal motor torque or 4D quadcopter propulsion vectors.
 2. **Post-Processing Video Stabilization & Deblur Engine:** C++ standalone library and C-ABI OpenFX plugin for NLE suites (DaVinci Resolve, Adobe Premiere Pro, Final Cut Pro). Ingests telemetry streams (GoPro GPMF binary, Gyroflow, CSV) to perform 3x3 frame-warp homography, trajectory SLERP smoothing, and anisotropic point spread function (PSF) motion deblurring.
+3. **Snapchat Motion-Intelligence Subsystem (`snap/`):** A unified motion-intelligence subsystem providing real-time camera capture stabilization, Lens Studio creator SDK event nodes, social mini-games, Spotlight motion-coherence quality ranking, AI motion mood color LUT grading, and Spectacles IMU head-gesture fusion.
+
+---
+
+## Snapchat Motion-Intelligence Features (`snap/`)
+
+The `snap/` directory contains the complete Snap Motion Intelligence subsystem created by **Don Michael Feeney Jr.**, integrating AeroCam’s mathematical core directly into Snapchat’s camera, Lens Studio, Spotlight, and Spectacles ecosystems:
+
+```
+snap/
+├── cpp/       # Performance-critical C++ optical flow, stability scoring, Spectacles fusion, Spotlight ranking
+├── include/   # C++ public headers and embedded GLSL shader headers
+├── ts/        # TypeScript SDK (@snap/aerocam-motion-intelligence) & Lens Studio Event Bus
+├── shaders/   # Real-time GPU homography warp shader (GLSL)
+├── examples/  # Lens Studio particle swirl lens, Spectacles demo, Spotlight ranking script
+└── tests/     # C++ unit tests registered in CTest
+```
+
+### 1. Motion-Stabilized Capture Pipeline
+- **Lightweight Optical Flow Extractor (`snap::MotionVectorExtractor`):** Extracts real-time sparse motion vectors over pyramid grid cells.
+- **Stability Scorer (`snap::StabilityScorer`):** Evaluates camera motion stability using AILEE Gaussian energy decay, outputting a scalar $S \in [0, 1]$.
+- **GPU Warp Shader (`snap/shaders/stabilization.glsl`):** Applies micro-correction 3x3 projective homography warping directly on the GPU before frame capture.
+- **UI Capture Hints (`CaptureHintService`):** Emits contextual guidance hints (`steady`, `pan left`, `pan right`, `good lighting`).
+
+### 2. Trajectory-Aware AR Lens Engine
+- **Publish-Subscribe Event Bus (`MotionEventBus`):** Broadcasts rotational velocity, acceleration, and trajectory curvature events.
+- **Lens Studio Nodes (`LensStudioNodes.ts`):** Creator event nodes `OnTiltNode`, `OnSpinNode`, `OnVelocitySpikeNode`, `OnTrajectoryCurveNode`, and `OnGestureNode`.
+- **Physics-Reactive AR:** Real-time particle swirl acceleration and character dodge offsets based on device velocity.
+
+### 3. Motion-Challenge Social Mini-Games
+- **Motion Challenge Engine (`MotionChallengeEngine`):** Social mini-game engine supporting challenge definitions:
+  - *"Hold steady for 5 seconds"*
+  - *"Trace shape in air"*
+  - *"Perform a 180° spin"*
+- **Scoring & Rewards:** Evaluates real-time compliance score $[0, 100]$ and triggers reward unlocks.
+
+### 4. Spotlight Motion-Coherence Ranking Module
+- **Temporal Motion Coherence (`snap::SpotlightMotionQualityIndex`):** Calculates vector smoothness across consecutive video frames.
+- **Spotlight Motion Quality Index (SMQI):** Combines scene stability and temporal coherence into a unified metric ($0.0$ to $1.0$).
+- **Spotlight Ingestion API (`SpotlightRankingAPI`):** Exposes evaluation endpoint for automated video feed promotion.
+
+### 5. AI-Driven Creative Moods Based on Motion
+- **Dynamic Color LUT Profiles (`MotionMoodEngine`):** Maps device motion patterns to color grading LUTs (e.g., rapid movement $\rightarrow$ *Neon Cyberpunk*, steady camera $\rightarrow$ *Cinematic Warm*).
+- **AI Prompt Generator:** Generates natural language prompt suggestions for generative AI Lenses based on motion vibe.
+
+### 6. Spectacles Motion-Intelligence Layer
+- **IMU + Camera Fusion (`snap::SpectaclesImuFusion`):** Fuses 1 kHz Spectacles head IMU telemetry with optical flow motion deltas.
+- **Hands-Free Gesture Recognition:** Real-time detection of head gestures: `NOD`, `SHAKE`, `TILT_LEFT`, `TILT_RIGHT`, `LEAN_FORWARD`, `LEAN_BACKWARD`.
+- **AR Display Alignment:** Computes real-time alignment correction quaternions for optical see-through display stabilization.
+
+### 7. Lens Studio Creator SDK (`@snap/aerocam-motion-intelligence`)
+Exposes TypeScript SDK APIs for Lens Studio creators:
+- `MotionVectorAPI`
+- `TrajectoryPredictor`
+- `StabilityScoreProvider`
+- `MotionReactiveAnimation`
 
 ---
 
@@ -268,7 +324,7 @@ make
 ```
 
 ### Native Unit Testing
-Run C++20 host unit tests for EKF, Quaternion math, and deblur calculations:
+Run C++20 host unit tests for EKF, Quaternion math, deblur calculations, and Snap motion intelligence:
 ```bash
 cmake -S . -B build-tests -G Ninja -DAEROCAM_TESTS=ON
 cmake --build build-tests
@@ -303,7 +359,7 @@ Refer to [`docs/BRINGUP.md`](docs/BRINGUP.md) for step-by-step diagnostic bring-
 
 ## License
 
-AeroCam is licensed under the MIT License. See [LICENSE](LICENSE) for the full license text.
+AeroCam is licensed under the MIT License with copyright held by **Don Michael Feeney Jr.** See [LICENSE](LICENSE) for the full license text.
 
 ---
 
