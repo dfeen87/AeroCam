@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 cmake_minimum_required(VERSION 3.20)
 
-project(AeroCam VERSION 3.0.0 LANGUAGES C CXX ASM)
+project(AeroCam VERSION 4.0.0 LANGUAGES C CXX ASM)
 
 option(AEROCAM_TESTS "Enable native unit tests" OFF)
 

@@ -1,6 +1,6 @@
 {
   "name": "@snap/aerocam-motion-intelligence",
-  "version": "1.0.0",
+  "version": "4.0.0",
   "description": "Snap Motion Intelligence Subsystem powered by AeroCam",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,7 +16,7 @@
     "motion-intelligence",
     "ar"
   ],
-  "author": "Snap Inc. / AeroCam Team",
+  "author": "Don Michael Feeney Jr.",
   "license": "MIT",
   "devDependencies": {
     "typescript": "^5.0.0"
