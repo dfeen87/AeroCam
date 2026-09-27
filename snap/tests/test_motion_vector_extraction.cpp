@@ -28,6 +28,15 @@ int main() {
     assert(!result.grid_vectors.empty());
     assert(result.timestamp_ns == 1000000);
 
+    // Invalid grid dimensions are clamped, avoiding division by zero.
+    snap::MotionVectorExtractor invalid_grid(0, -1);
+    result = invalid_grid.extract(frame1.data(), frame2.data(), width, height, 2000000);
+    assert(result.timestamp_ns == 2000000);
+
+    invalid_grid.set_grid_dimensions(-2, 0);
+    result = invalid_grid.extract(frame1.data(), frame2.data(), width, height, 3000000);
+    assert(result.timestamp_ns == 3000000);
+
     std::cout << "TestMotionVectorExtraction PASSED!" << std::endl;
     return 0;
 }

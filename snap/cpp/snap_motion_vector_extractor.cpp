@@ -5,11 +5,11 @@
 namespace snap {
 
 MotionVectorExtractor::MotionVectorExtractor(int grid_cols, int grid_rows)
-    : grid_cols_(grid_cols), grid_rows_(grid_rows) {}
+    : grid_cols_(std::max(1, grid_cols)), grid_rows_(std::max(1, grid_rows)) {}
 
 void MotionVectorExtractor::set_grid_dimensions(int cols, int rows) {
-    grid_cols_ = cols;
-    grid_rows_ = rows;
+    grid_cols_ = std::max(1, cols);
+    grid_rows_ = std::max(1, rows);
 }
 
 MotionVectorFrame MotionVectorExtractor::extract(const uint8_t* prev_frame,

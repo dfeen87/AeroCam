@@ -82,6 +82,7 @@ if(AEROCAM_TESTS)
 
     set(AEROCAM_LIB_SOURCES
         src/aerocam_stabilizer.cpp
+        src/icm20948_driver.cpp
         src/drone_stabilizer.cpp
         src/quaternion.cpp
         src/imu_telemetry_parser.cpp
@@ -105,6 +106,10 @@ if(AEROCAM_TESTS)
     add_executable(TestEKF tests/test_ekf.cpp)
     target_link_libraries(TestEKF PRIVATE AeroCamLib)
     add_test(NAME TestEKF COMMAND TestEKF)
+
+    add_executable(TestICM20948Driver tests/test_icm20948_driver.cpp)
+    target_link_libraries(TestICM20948Driver PRIVATE AeroCamLib)
+    add_test(NAME TestICM20948Driver COMMAND TestICM20948Driver)
 
     # Snap Motion Intelligence C++ Unit Tests
     add_executable(TestMotionVectorExtraction snap/tests/test_motion_vector_extraction.cpp)
