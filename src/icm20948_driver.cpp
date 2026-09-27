@@ -68,6 +68,11 @@ bool ICM20948_Driver::write_register(std::uint8_t bank, std::uint8_t reg, std::u
 
 bool ICM20948_Driver::read_registers(std::uint8_t bank, std::uint8_t reg,
                                      std::span<std::uint8_t> buffer) {
+    constexpr std::size_t MAX_TRANSFER_SIZE = 32;
+    if (buffer.size() > MAX_TRANSFER_SIZE) {
+        return false;
+    }
+
     if (!select_bank(bank)) {
         return false;
     }
@@ -95,7 +100,13 @@ bool ICM20948_Driver::read_registers(std::uint8_t bank, std::uint8_t reg,
 }
 
 bool ICM20948_Driver::select_bank(std::uint8_t bank) {
-    return write_register(0, REG_BANK_SEL, bank);
+    // REG_BANK_SEL is accessible from every bank. Write it directly rather
+    // than going through write_register(), which selects a bank itself.
+    const std::uint8_t tx_buf[2] = {REG_BANK_SEL, bank};
+    spi_.select();
+    spi_.write(std::span<const std::uint8_t>(tx_buf, 2));
+    spi_.deselect();
+    return true;
 }
 
 bool ICM20948_Driver::configure_power() {
